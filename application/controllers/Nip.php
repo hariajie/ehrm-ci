@@ -1,9 +1,10 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Nip extends CI_Controller {
+class Nip extends CI_Controller
+{
 
-	
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -12,31 +13,30 @@ class Nip extends CI_Controller {
 	public function index()
 	{
 		//$this->load->model("mwilayah");
-		$data =array();
-		
+		$data = array();
+
 		$this->load->view('nip_view', $data);
 	}
 
-	function get_ehrm_nip() 
+	function get_ehrm_nip()
 	{
 
 		$url = "https://ehrm.pu.go.id/pupr/api/index.php"; //sesuaikan dengan url api
-		$private_key ='fnaifh84659290'; //jangan diganti
+		$private_key = 'fnaifh84659290'; //jangan diganti
 
 		$nip = $_POST["nip"];
 		$params = array(
-			    'nip' => $nip,
-			    'action' => 'pusdatinnip'
-			 );
+			'nip' => $nip,
+			'action' => 'data_pegawai_sitaba'
+		);
 		$data = array();
 
- 		
-  		$result = $this->ehrm->trf_send_request($url, $private_key, $params, $params['action']);
+
+		$result = $this->ehrm->trf_send_request($url, $private_key, $params, $params['action']);
 
 		if (isset($result['info'])) {
 			$data['hasil'] = 'nothing';
-		}
-		else {
+		} else {
 			$data['hasil'] = "ada";
 			$data["nama"] = $result[0]['pegawai']['nama'];
 			$data["jabatan"] = $result[0]['pegawai']['jabatan'];
@@ -47,11 +47,11 @@ class Nip extends CI_Controller {
 
 			//$this->session->unset_tempdata("id_unker");
 			//$this->session->set_tempdata("id_unker", $data["unker"]);
-			
+
 		}
 
 		$this->output
-		 	 ->set_content_type('application/json')
-		  	 ->set_output(json_encode($data));
+			->set_content_type('application/json')
+			->set_output(json_encode($data));
 	}
 }
